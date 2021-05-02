@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "417799638668",
+    "project_id": "i-wallet-9998c",
+    "storage_bucket": "i-wallet-9998c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417799638668:android:8ee609ff8b8162e403b5a9",
+        "android_client_info": {
+          "package_name": "com.example.ipay_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417799638668-0l9b5oqtcpf2g0ihr9ttl716ugi92ucj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAesz01hzmDuBmPd-mCKYCIsrZRewAhHpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417799638668-0l9b5oqtcpf2g0ihr9ttl716ugi92ucj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
