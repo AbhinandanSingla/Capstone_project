@@ -1,10 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_signup/pages/reset.dart';
 import 'package:flutter_login_signup/pages/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_login_signup/services/bezierContainer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_login_signup/Service/AuthenticationService.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
+
+
 
   final String title;
 
@@ -13,204 +20,214 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.white),
-            ),
-            Text('Back',
-                style: TextStyle(fontSize: 14,color: Colors.white , fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
+  final _key = GlobalKey<FormState>();
+  String _email, _password;
+
+  String _error;
+
+  bool validate() {
+    final form = _key.currentState;
+    form.save();
+    if (form.validate()) {
+      form.save();
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo[900] , fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    );
-  }
+  final AuthenticationService _auth = AuthenticationService();
+  final auth = FirebaseAuth.instance;
 
-  Widget _submitButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.grey.shade200,
-                offset: Offset(2, 4),
-                blurRadius: 5,
-                spreadRadius: 2)
-          ],
-          gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Colors.indigo[300], Colors.indigo[900]])),
-      child: MaterialButton(
-        onPressed : () {},
-        child : Text(
-      'Login',
-      style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
-      ),
-    );
-  }
-
-  Widget _divider() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-
-            ),
-          ),
-
-          SizedBox(
-            width: 20,
-          ),
-        ],
-      ),
-    );
-  }
-
-
-
-  Widget _createAccountLabel() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpPage()));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Don\'t have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Register',
-              style: TextStyle(
-                  color: Colors.indigo[900],
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-              text: 'I-Pay',
-              style: TextStyle(color: Colors.indigo[900], fontSize: 50),
-            ),
-          );
-  }
-
-  Widget _emailPasswordWidget() {
-    return Column(
-      children: <Widget>[
-        _entryField("Roll Number"),
-        _entryField("Password", isPassword: true),
-      ],
-    );
-  }
+  TextEditingController _emailContoller = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-        body: Container(
-          height: height,
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                  top: -height * .15,
-                  right: -MediaQuery.of(context).size.width * .4,
-                  child: BezierContainer()),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(height: height * .2),
-                      _title(),
-                      SizedBox(height: 50),
-                      _emailPasswordWidget(),
-                      SizedBox(height: 20),
-                      _submitButton(),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        alignment: Alignment.centerRight,
-                        child: Text('Forgot Password ?',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500)),
-                      ),
-                      _divider(),
+        body: SingleChildScrollView(
+          child: Container(
+            // color: Colors.deepPurple,
+            height: height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("images/pic.jpg"),
+                  fit: BoxFit.cover
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey.shade500,
+                    offset: Offset(2, 4),
+                    blurRadius: 5,
+                    spreadRadius: 2)
+              ],
+            ),
+            child: Center(
+              child: Form(
+                key: _key,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
 
-                      SizedBox(height: height * .055),
-                      _createAccountLabel(),
-                    ],
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("images/pic.jpg"),
-                      fit: BoxFit.cover),
+                    Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.indigo[900],
+                        fontSize: 50,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 30),
+                          TextFormField(
+                            controller: _emailContoller,
+                            validator: (value) {
+                              if (value.isEmpty || !value.contains("@"))
+                              {
+                                return 'Email is invalid';
+                              }
+                              else
+                                return null;
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'Email',
+                                labelStyle: TextStyle(
+                                    color: Colors.indigo[900],
+                                  fontSize: 17,
+                                )
+                            ),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(height: 30),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            validator: (value) {
+                              if (value.isEmpty || value.length<6) {
+                                return 'Password is invalid';
+                              } else
+                                return null;
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'Password',
+                                labelStyle: TextStyle(
+                                    color: Colors.indigo[900],
+                                  fontSize: 17,
+                                )
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                child: Text(
+                                    'Forgot Password?',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => ResetScreen()),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          FlatButton(
+                            child: Text(
+                                'Not registerd? Sign up',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                fontSize: 13,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                  fullscreenDialog: true,
+                                  builder: (context) => SignUpPage(),
+                                ),
+                              );
+                            },
+                            textColor: Colors.white,
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FlatButton(
+                                child: Text(
+                                    'Login',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17,
+                                    ),
+                                ),
+                                onPressed: () => signInUser(),
+                                  // if (_key.currentState.validate()) {
+                                  //   signInUser();
+                                  // }
+                                // },
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(top: 40, left: 0, child: _backButton()),
-            ],
+            ),
           ),
-        ));
+        )
+    );
   }
-}
+
+  void signInUser() async {
+    if(validate()) {
+      try {
+        dynamic authResult = await _auth.loginUser(
+            _emailContoller.text, _passwordController.text);
+        if (authResult == null) {
+          print('Sign in error. could not be able to login');
+        } else {
+          _emailContoller.clear();
+          _passwordController.clear();
+
+          Navigator.pushNamed(context, '/Home');
+          print('login successfull');
+        }
+      }
+      catch (e) {
+        setState(() {
+          _error = e.message;
+        });
+      }
+    }
+  }
+
+  // signInUser() async {
+  //   try {
+  //     //Create Get Firebase Auth User
+  //     await auth.signInWithEmailAndPassword(email: _emailContoller.text, password : _passwordController.text);
+  //
+  //     //Success
+  //     Navigator.pushNamed(context, '/Home');
+  //
+  //   } on FirebaseAuthException catch (error) {
+  //     return Fluttertoast.showToast(msg: error.message,gravity: ToastGravity.TOP);
+  //   }
+
+  }
