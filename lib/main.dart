@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_login_signup/pages/AddMoney.dart';
 import 'package:flutter_login_signup/pages/Home.dart';
 import 'package:flutter_login_signup/pages/loginPage.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_login_signup/pages/signup.dart';
 import 'package:flutter_login_signup/pages/verify.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_login_signup/pages/welcomePage.dart';
+import 'package:flutter_login_signup/pages/barcode_scanner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/verify' : (context) => VerifyScreen(),
         '/AddMoney' : (context) => AddMoney(),
         '/AddMoney' : (context) => NewScreen(),
+        '/barcode': (context) => bc(),
 
       },
       title: 'Info App',

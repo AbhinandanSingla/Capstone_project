@@ -18,7 +18,7 @@ class AuthenticationService{
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User user = result.user;
-      await DatabaseManager().createUserData(name, rollNumber , user.uid);
+      await DatabaseManager().createUserData(email , name, rollNumber , user.uid);
       // await DatabaseManager().getUsersList(user.uid);
       return user;
     }catch(e){

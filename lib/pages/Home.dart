@@ -9,8 +9,11 @@ import 'package:flutter_login_signup/pages/AddMoney.dart';
 import 'package:flutter_login_signup/pages/moneyWallet.dart';
 import 'ProfileUI1.dart';
 import'package:flutter_login_signup/pages/ProfileUI1.dart';
+import 'package:flutter_login_signup/pages/barcode_scanner.dart';
 // import 'package:provider/provider.dart';
 import 'package:flutter_login_signup/pages/provider.dart';
+
+import 'barcode_scanner.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -204,6 +207,8 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                           onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => bc()));
 
                           },
                         ),

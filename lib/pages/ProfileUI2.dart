@@ -31,6 +31,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String name;
   String rollNo;
+  String money;
 
   @override
   void initState(){
@@ -61,6 +62,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           // print(resultant);
           name = resultant.get('name');
           rollNo = resultant.get('rollNo');
+          money = resultant.get('money');
           // String name = resultant.g;
           // String rollNo = resultant[1];
           // print("name = $name");
@@ -70,8 +72,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
-  updateData(String name, String rollNo, String userID) async {
-    await DatabaseManager().updateUserList(name, rollNo,  userID);
+  updateData(String name, String rollNo, String money , String userID) async {
+    await DatabaseManager().updateUserList(name, rollNo, money ,  userID);
     fetchDatabaseList();
   }
 
@@ -226,7 +228,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
    submitAction(BuildContext context) {
-     updateData(_nameController.text, rollNoController.text,uid);
+     updateData(_nameController.text, rollNoController.text, money , uid);
      _nameController.clear();
      rollNoController.clear();
    }

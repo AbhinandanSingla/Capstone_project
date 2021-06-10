@@ -10,18 +10,22 @@ class DatabaseManager{
   DatabaseManager({this.uid});
 
   final profile =  FirebaseFirestore.instance.collection('profile');
+  final chatRoom =  FirebaseFirestore.instance.collection('chatRoom');
 
-  Future  createUserData(String name , String rollNumber, String uid) async{
+  Future createUserData( String email , String name , String rollNumber, String uid) async{
     return await profile.doc(uid).set({
+      'userEmail': email,
       'name': name,
-      'rollNo' : rollNumber
+      'rollNo' : rollNumber,
+      'money' : "0"
     });
   }
 
-  Future updateUserList(String name, String rollNumber , String uid) async {
+  Future updateUserList(String name, String rollNumber , String money , String uid) async {
     return await profile.doc(uid).update({
       'name': name,
-      'rollNo': rollNumber
+      'rollNo': rollNumber,
+      'money' : money
     });
   }
 
