@@ -15,7 +15,8 @@ class DatabaseManager {
       'name': name,
       'rollNo': rollNumber,
       'money': "0",
-      'feed': []
+      'feed': [],
+      'transaction': []
     });
   }
 

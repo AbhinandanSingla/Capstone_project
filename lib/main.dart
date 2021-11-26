@@ -6,6 +6,7 @@ import 'package:flutter_login_signup/pages/AddMoney.dart';
 import 'package:flutter_login_signup/pages/Home.dart';
 import 'package:flutter_login_signup/pages/barcode_scanner.dart';
 import 'package:flutter_login_signup/pages/loginPage.dart';
+import 'package:flutter_login_signup/pages/pinScreen.dart';
 import 'package:flutter_login_signup/pages/signup.dart';
 import 'package:flutter_login_signup/pages/verify.dart';
 import 'package:flutter_login_signup/pages/welcomePage.dart';
@@ -28,8 +29,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     bool? login = preferenceHelper.preferences.getBool('login');
+    print(
+        '${preferenceHelper.preferences.getBool('login')}++++++++++++++++++++++');
     return MaterialApp(
-      initialRoute: '/welcomepage',
+      // initialRoute: '/welcomepage',
       routes: {
         '/welcomepage': (context) => WelcomePage(),
         '/Home': (context) => Home(),
@@ -48,7 +51,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: login != null && login == true ? Home() : WelcomePage(),
+      home: login == true ? PinPutTest() : WelcomePage(),
     );
   }
 }
