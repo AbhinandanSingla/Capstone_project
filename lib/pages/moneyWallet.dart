@@ -9,19 +9,19 @@ import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
 
 
 class WalletApp extends StatefulWidget {
-  String money;
-  WalletApp({Key key, @required this.money}) : super(key : key);
+  String ? money;
+  WalletApp({Key ?key, this.money}) : super(key : key);
   @override
-  _WalletAppState createState() => _WalletAppState(money);
+  _WalletAppState createState() => _WalletAppState(money!);
 }
 
 class _WalletAppState extends State<WalletApp> {
   final AuthenticationService _auth = AuthenticationService();
-  String money;
+  late String money;
   dynamic uid;
-  String _money;
-  String name;
-  String rollNo;
+  late String _money;
+  late String name;
+  late String rollNo;
 
   String _expression = '0';
   String history ='';

@@ -13,9 +13,9 @@ import 'package:firebase_core/firebase_core.dart';
 
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage({Key key, this.title}) : super(key: key);
+  SignUpPage({Key ?key, this.title}) : super(key: key);
 
-  final String title;
+  final String ?title;
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -93,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
                          TextFormField(
                            controller: _nameController,
                            validator: (value) {
-                             if (value.isEmpty) {
+                             if (value!.isEmpty) {
                                return 'Name cannot be empty';
                              } else
                                return null;
@@ -113,7 +113,7 @@ class _SignUpPageState extends State<SignUpPage> {
                            controller: rollNoController,
                            keyboardType: TextInputType.number,
                            validator: (value) {
-                             if (value.isEmpty) {
+                             if (value!.isEmpty) {
                                return 'Roll no can not be empty';
                              } else
                                return null;
@@ -133,7 +133,7 @@ class _SignUpPageState extends State<SignUpPage> {
                            controller: _emailContoller,
                              keyboardType: TextInputType.emailAddress,
                            validator: (value) {
-                             if (value.isEmpty ) {
+                             if (value!.isEmpty ) {
                                return 'Email cannot be empty';
                              }
                              else if(!value.contains('@') || !value.contains('thapar.edu')){
@@ -156,7 +156,7 @@ class _SignUpPageState extends State<SignUpPage> {
                            controller: _passwordController,
                            obscureText: true,
                            validator: (value) {
-                             if (value.isEmpty || value.length<6) {
+                             if (value!.isEmpty || value.length<6) {
                                return 'Password cannot be empty';
                              } else
                                return null;
@@ -198,7 +198,7 @@ class _SignUpPageState extends State<SignUpPage> {
                              FlatButton(
                                child: Text('Sign Up'),
                                onPressed: () {
-                                 if (_key.currentState.validate()) {
+                                 if (_key.currentState!.validate()) {
                                    createUser();
                                  }
                                },

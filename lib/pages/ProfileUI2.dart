@@ -29,9 +29,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController rollNoController = TextEditingController();
 
-  String name;
-  String rollNo;
-  String money;
+  late String name;
+  late String rollNo;
+  late String money;
 
   @override
   void initState(){

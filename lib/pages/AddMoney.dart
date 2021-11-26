@@ -14,7 +14,7 @@ class AddMoney extends StatefulWidget {
 }
 class _AddMoneyState extends State<AddMoney> {
   GlobalState _store = GlobalState.instance;
-  TextEditingController _money;
+  late TextEditingController _money;
   final TextEditingController t1 = new TextEditingController(text: "0");
   // final AuthenticationService _auth = AuthenticationService();
   // dynamic uid;

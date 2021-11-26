@@ -30,8 +30,8 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController rollNoController = TextEditingController();
   // List userProfilesList = [];
-  String name;
-  String rollNo;
+  late String name;
+  late String rollNo;
   dynamic uid;
 
   @override

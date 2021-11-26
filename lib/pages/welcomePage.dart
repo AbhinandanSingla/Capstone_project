@@ -4,9 +4,9 @@ import 'package:flutter_login_signup/pages/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WelcomePage extends StatefulWidget {
-  WelcomePage({Key key, this.title}) : super(key: key);
+  WelcomePage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _WelcomePageState createState() => _WelcomePageState();
@@ -27,7 +27,7 @@ class _WelcomePageState extends State<WelcomePage> {
             borderRadius: BorderRadius.all(Radius.circular(5)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Colors.indigo[500],
+                  color: Colors.indigo.shade500,
                   offset: Offset(2, 4),
                   blurRadius: 8,
                   spreadRadius: 2)
@@ -55,7 +55,7 @@ class _WelcomePageState extends State<WelcomePage> {
             borderRadius: BorderRadius.all(Radius.circular(5)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Colors.indigo[500],
+                  color: Colors.indigo.shade500,
                   offset: Offset(2, 4),
                   blurRadius: 8,
                   spreadRadius: 2)
@@ -95,7 +95,7 @@ class _WelcomePageState extends State<WelcomePage> {
       textAlign: TextAlign.start,
       text: TextSpan(
           style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.display1,
+            textStyle: Theme.of(context).textTheme.headline1,
             fontSize: 30,
             fontWeight: FontWeight.w900,
             color: Colors.white,
@@ -117,26 +117,21 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child:Container(
+        child: Container(
           padding: EdgeInsets.symmetric(horizontal: 30),
           height: MediaQuery.of(context).size.height,
-
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("images/pic.jpg"),
-                  fit: BoxFit.cover),
-
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.shade500,
-                    offset: Offset(2, 4),
-                    blurRadius: 5,
-                    spreadRadius: 2)
-              ],
+            image: DecorationImage(
+                image: AssetImage("images/pic.jpg"), fit: BoxFit.cover),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade500,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
           ),
-
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

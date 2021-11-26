@@ -8,7 +8,7 @@ class ResetScreen extends StatefulWidget {
 }
 
 class _ResetScreenState extends State<ResetScreen> {
-  String _email;
+  late String _email;
   final auth = FirebaseAuth.instance;
 
   @override

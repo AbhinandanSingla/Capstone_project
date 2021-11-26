@@ -1,32 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_login_signup/Service/AuthenticationService.dart';
 
-class DatabaseManager{
+class DatabaseManager {
+  final String? uid;
 
-  final String uid;
   DatabaseManager({this.uid});
 
-  final profile =  FirebaseFirestore.instance.collection('profile');
-  final chatRoom =  FirebaseFirestore.instance.collection('chatRoom');
+  final profile = FirebaseFirestore.instance.collection('profile');
+  final chatRoom = FirebaseFirestore.instance.collection('chatRoom');
 
-  Future createUserData( String email , String name , String rollNumber, String uid) async{
+  Future createUserData(
+      String email, String name, String rollNumber, String uid) async {
     return await profile.doc(uid).set({
       'userEmail': email,
       'name': name,
-      'rollNo' : rollNumber,
-      'money' : "0"
+      'rollNo': rollNumber,
+      'money': "0",
+      'feed': []
     });
   }
 
-  Future updateUserList(String name, String rollNumber , String money , String uid) async {
-    return await profile.doc(uid).update({
-      'name': name,
-      'rollNo': rollNumber,
-      'money' : money
-    });
+  Future updateUserList(
+      String name, String rollNumber, String money, String uid) async {
+    return await profile
+        .doc(uid)
+        .update({'name': name, 'rollNo': rollNumber, 'money': money});
   }
 
   Future getUsersList() async {
@@ -42,11 +39,10 @@ class DatabaseManager{
       return itemsList;
       String name = itemsList.get('name');
       String rollNo = itemsList.get('rollNo');
-      return [name , rollNo];
+      return [name, rollNo];
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
-
 }
