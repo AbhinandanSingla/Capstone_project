@@ -3,15 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
-class PinPutTest extends StatefulWidget {
+class PinScreen extends StatefulWidget {
+  late final data;
+  PinScreen(data);
   @override
-  PinPutTestState createState() => PinPutTestState();
+  State<PinScreen> createState() => _PinScreenState(this.data);
 }
 
-class PinPutTestState extends State<PinPutTest> {
+class _PinScreenState extends State<PinScreen> {
   final TextEditingController _pinPutController = TextEditingController();
+
   final FocusNode _pinPutFocusNode = FocusNode();
+
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  _PinScreenState(data);
 
   createRoom() async {
     String? uid = preferenceHelper.preferences.getString('uid');
@@ -31,7 +37,6 @@ class PinPutTestState extends State<PinPutTest> {
       ])
     });
   }
-
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(

@@ -1,12 +1,11 @@
-import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
+import 'package:flutter_login_signup/Service/AuthenticationService.dart';
+
+import 'Home.dart';
 import 'ProfileUI2.dart';
 import 'loginPage.dart';
-import 'Home.dart';
-import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
-import 'package:flutter_login_signup/pages/provider.dart';
-import 'package:flutter_login_signup/Service/AuthenticationService.dart';
 
 class Settings1 extends StatelessWidget {
   @override
@@ -29,43 +28,42 @@ class _ProfilePageState extends State<ProfilePage> {
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController _nameController = TextEditingController();
   TextEditingController rollNoController = TextEditingController();
+
   // List userProfilesList = [];
-  late String name;
-  late String rollNo;
+  late String name='';
+  late String rollNo='';
   dynamic uid;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     fetchDatabaseList();
   }
 
   Future<void> fetchDatabaseList() async {
-
     uid = await _auth.getCurrentUID();
     if (uid == null) {
       print("UID is NULL");
-    }
-    else {
+    } else {
       print("uid-$uid");
       DatabaseManager databaseManager = DatabaseManager(uid: uid);
       DocumentSnapshot resultant = await databaseManager.getUsersList();
 
-          if (resultant == null) {
-            print('Unable to retrieve');
-          } else {
-            setState(() {
-              // print(resultant);
-              name = resultant.get('name');
-              rollNo = resultant.get('rollNo');
-             // String name = resultant.g;
-             // String rollNo = resultant[1];
-             // print("name = $name");
-             // print("rollNor = $rollNo");
-            });
-          }
+      if (resultant == null) {
+        print('Unable to retrieve');
+      } else {
+        setState(() {
+          // print(resultant);
+          name = resultant.get('name');
+          rollNo = resultant.get('rollNo');
+          // String name = resultant.g;
+          // String rollNo = resultant[1];
+          // print("name = $name");
+          // print("rollNor = $rollNo");
+        });
+      }
     }
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +76,11 @@ class _ProfilePageState extends State<ProfilePage> {
             Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));},
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          },
         ),
-
       ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
@@ -88,7 +88,6 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () {
               FocusScope.of(context).unfocus();
             },
-
             child: ListView(
               children: [
                 Center(
@@ -120,38 +119,40 @@ class _ProfilePageState extends State<ProfilePage> {
                           shape: BoxShape.circle,
                         ),
                       ),
-
                     ],
                   ),
                 ),
                 SizedBox(
                   height: 25,
                 ),
-
-
-                Text("Full Name",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                Text(
+                  "Full Name",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
                 SizedBox(
                   height: 5,
                 ),
-                Text("$name"),
-                Divider(color: Colors.grey[500],),
+                name != null ? Text("$name") : Text(''),
+                Divider(
+                  color: Colors.grey[500],
+                ),
                 SizedBox(
                   height: 5,
                 ),
-
-
-
-                Text("Roll Number",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                Text(
+                  "Roll Number",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
                 SizedBox(
                   height: 5,
                 ),
                 Text("$rollNo"),
-                Divider(color: Colors.grey[500],),
+                Divider(
+                  color: Colors.grey[500],
+                ),
                 SizedBox(
                   height: 15,
                 ),
-
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -160,9 +161,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         // print("name = $name");
                         // print("rollNor = $rollNo");
                         // print("uid-$uid");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsUI()));},
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SettingsUI()));
+                      },
                       color: Colors.black,
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                       elevation: 2,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
@@ -173,18 +179,21 @@ class _ProfilePageState extends State<ProfilePage> {
                             letterSpacing: 2.2,
                             color: Colors.white),
                       ),
-
                     ),
                     RaisedButton(
                         onPressed: () {
                           // print(userProfilesList);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));},
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
+                        },
                         color: Colors.black,
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        child:Row(
+                        child: Row(
                           children: [
                             IconButton(
                               icon: Icon(
@@ -192,8 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 size: 16,
                                 color: Colors.white,
                               ),
-                              onPressed: () {
-                              },
+                              onPressed: () {},
                             ),
                             Text(
                               "Signout",
@@ -203,16 +211,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                   color: Colors.white),
                             ),
                           ],
-                        )
-                    )
+                        ))
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 )
               ],
-            )
-        ),
+            )),
       ),
     );
     //     body: Container(

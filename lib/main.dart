@@ -6,11 +6,11 @@ import 'package:flutter_login_signup/pages/AddMoney.dart';
 import 'package:flutter_login_signup/pages/Home.dart';
 import 'package:flutter_login_signup/pages/barcode_scanner.dart';
 import 'package:flutter_login_signup/pages/loginPage.dart';
-import 'package:flutter_login_signup/pages/pinScreen.dart';
 import 'package:flutter_login_signup/pages/signup.dart';
 import 'package:flutter_login_signup/pages/verify.dart';
 import 'package:flutter_login_signup/pages/welcomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,27 +31,32 @@ class MyApp extends StatelessWidget {
     bool? login = preferenceHelper.preferences.getBool('login');
     print(
         '${preferenceHelper.preferences.getBool('login')}++++++++++++++++++++++');
-    return MaterialApp(
-      // initialRoute: '/welcomepage',
-      routes: {
-        '/welcomepage': (context) => WelcomePage(),
-        '/Home': (context) => Home(),
-        '/login': (context) => LoginPage(),
-        '/signup': (context) => SignUpPage(),
-        '/verify': (context) => VerifyScreen(),
-        '/AddMoney': (context) => AddMoney(),
-        '/AddMoney': (context) => NewScreen(),
-        '/barcode': (context) => bc(),
-      },
-      title: 'Info App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
-          bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
+    return MultiProvider(
+      providers: [
+
+      ],
+      child: MaterialApp(
+        // initialRoute: '/welcomepage',
+        routes: {
+          '/welcomepage': (context) => WelcomePage(),
+          '/Home': (context) => Home(),
+          '/login': (context) => LoginPage(),
+          '/signup': (context) => SignUpPage(),
+          '/verify': (context) => VerifyScreen(),
+          '/AddMoney': (context) => AddMoney(),
+          '/AddMoney': (context) => NewScreen(),
+          '/barcode': (context) => bc(),
+        },
+        title: 'Info App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
+            bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
+          ),
         ),
+        debugShowCheckedModeBanner: false,
+        home: login == true ? Home() : WelcomePage(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: login == true ? PinPutTest() : WelcomePage(),
     );
   }
 }

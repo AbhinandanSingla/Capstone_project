@@ -6,6 +6,7 @@ import 'package:flutter_login_signup/Service/AuthenticationService.dart';
 import 'package:flutter_login_signup/pages/AddMoney.dart';
 import 'package:flutter_login_signup/pages/ProfileUI1.dart';
 import 'package:flutter_login_signup/pages/moneyWallet.dart';
+import 'package:flutter_login_signup/pages/pinScreen.dart';
 
 import 'ProfileUI1.dart';
 import 'chats.dart';
@@ -36,8 +37,10 @@ class _HomeState extends State<Home> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => PinScreen(_scanBarcode)));
     setState(() {
+      print('$barcodeScanRes+++++++++++++++++++');
       _scanBarcode = barcodeScanRes;
     });
   }
