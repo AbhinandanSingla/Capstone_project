@@ -1,22 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login_signup/pages/GlobalState.dart';
+import 'package:flutter_login_signup/pages/pinScreen.dart';
 
 class SendMoney extends StatefulWidget {
+  late final data;
+
+  SendMoney(this.data);
+
   @override
-  State<SendMoney> createState() => _SendMoneyState();
+  State<SendMoney> createState() => _SendMoneyState(this.data);
 }
 
 class _SendMoneyState extends State<SendMoney> {
   GlobalState _store = GlobalState.instance;
 
+  _SendMoneyState(data);
+
   late TextEditingController _money;
 
   final TextEditingController t1 = new TextEditingController(text: "0");
+  FirebaseFirestore _firebase = FirebaseFirestore.instance;
+  late String pin;
 
   @override
   void initState() {
     super.initState();
+
+    print('${widget.data} ++++++step reached');
     // fetchDatabaseList();
     _money = TextEditingController();
     _store.set('money', '');
@@ -82,6 +94,9 @@ class _SendMoneyState extends State<SendMoney> {
                   style: TextStyle(fontSize: 22.0),
                 ),
                 onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => PinScreen(
+                          {'money': _money.value.text, 'uid': widget.data})));
                   // showAlertDialog(context);
                   // submitAction(context);
                   // Navigator.push(

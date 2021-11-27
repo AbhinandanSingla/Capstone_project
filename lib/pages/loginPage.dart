@@ -5,10 +5,12 @@ import 'package:flutter_login_signup/Service/AuthenticationService.dart';
 import 'package:flutter_login_signup/pages/reset.dart';
 import 'package:flutter_login_signup/pages/signup.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key,this.title}) : super(key: key);
+import 'Home.dart';
 
-  final String ? title;
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key, this.title}) : super(key: key);
+
+  final String? title;
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -192,9 +194,8 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           _emailContoller.clear();
           _passwordController.clear();
-
-          Navigator.pushNamed(context, '/Home');
-          print('login successfull');
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (ctx) => Home()));
         }
       } catch (e) {
         setState(() {

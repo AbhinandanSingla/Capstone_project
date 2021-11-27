@@ -10,7 +10,6 @@ import 'package:flutter_login_signup/pages/signup.dart';
 import 'package:flutter_login_signup/pages/verify.dart';
 import 'package:flutter_login_signup/pages/welcomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,32 +30,27 @@ class MyApp extends StatelessWidget {
     bool? login = preferenceHelper.preferences.getBool('login');
     print(
         '${preferenceHelper.preferences.getBool('login')}++++++++++++++++++++++');
-    return MultiProvider(
-      providers: [
-
-      ],
-      child: MaterialApp(
-        // initialRoute: '/welcomepage',
-        routes: {
-          '/welcomepage': (context) => WelcomePage(),
-          '/Home': (context) => Home(),
-          '/login': (context) => LoginPage(),
-          '/signup': (context) => SignUpPage(),
-          '/verify': (context) => VerifyScreen(),
-          '/AddMoney': (context) => AddMoney(),
-          '/AddMoney': (context) => NewScreen(),
-          '/barcode': (context) => bc(),
-        },
-        title: 'Info App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
-            bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
-          ),
+    return MaterialApp(
+      // initialRoute: '/welcomepage',
+      routes: {
+        '/welcomepage': (context) => WelcomePage(),
+        '/Home': (context) => Home(),
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => SignUpPage(),
+        '/verify': (context) => VerifyScreen(),
+        '/AddMoney': (context) => AddMoney(),
+        '/AddMoney': (context) => NewScreen(),
+        '/barcode': (context) => bc(),
+      },
+      title: 'Info App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
+          bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
         ),
-        debugShowCheckedModeBanner: false,
-        home: login == true ? Home() : WelcomePage(),
       ),
+      debugShowCheckedModeBanner: false,
+      home: login == true && login != null ? Home() : WelcomePage(),
     );
   }
 }

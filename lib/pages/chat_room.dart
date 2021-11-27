@@ -182,7 +182,10 @@ class _ChatRoomState extends State<ChatRoom> {
                               sendChat(message: {
                                 'message': _message.value.text,
                                 'uid': uid,
-                                'time': DateTime.now()
+                                'time': DateTime.now(),
+                                'money': 0,
+                                'send': false,
+                                'moneyBool': false,
                               }, id: widget.id),
                               _message.clear()
                             },

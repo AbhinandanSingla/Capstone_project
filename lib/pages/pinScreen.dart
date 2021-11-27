@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
+import 'package:flutter_login_signup/pages/chats.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 class PinScreen extends StatefulWidget {
-  late final data;
-  PinScreen(data);
+  final data;
+
+  PinScreen(this.data);
+
   @override
   State<PinScreen> createState() => _PinScreenState(this.data);
 }
@@ -19,23 +22,136 @@ class _PinScreenState extends State<PinScreen> {
 
   _PinScreenState(data);
 
-  createRoom() async {
-    String? uid = preferenceHelper.preferences.getString('uid');
+  String? userPin;
+  String? userUID;
+  String? userName;
 
-    DocumentReference snap = await _firestore.collection('chatRoom').doc();
+  getPin() {
+    _firestore
+        .collection('profile')
+        .where('rollNo', isEqualTo: widget.data['uid'])
+        .get()
+        .then((value) {
+      userUID = value.docs[0].id;
+      userPin = value.docs[0].get('pin');
+      userName = value.docs[0].get('name');
+    });
+  }
+
+  sendMoney(ctx) async {
+    String? uid = preferenceHelper.preferences.getString('uid');
+    String? rollno = preferenceHelper.preferences.getString('rollno');
+    String money = '';
+    await _firestore
+        .collection('profile')
+        .doc(userUID)
+        .get()
+        .then((value) => money = value.get('money'));
+    print('step money +++++ $money');
+    print('step money +++++ ${widget.data['money']}');
+    if (double.parse(money) < double.parse(widget.data['money'].toString())) {
+      return _showSnackBar('Money is insufficient in wallet', ctx);
+    }
+
+    money =
+        '${double.parse(money) - double.parse(widget.data['money'].toString())}';
+    await _firestore.collection('profile').doc(userUID).update({
+      'money': money,
+      'transaction': FieldValue.arrayUnion([
+        {
+          'uid': uid,
+          'money': widget.data['money'],
+          'send': true,
+          'time': DateTime.now(),
+          'rollNo': widget.data['uid'],
+        }
+      ])
+    });
+    var userMoney;
+    await _firestore
+        .collection('profile')
+        .doc(uid)
+        .get()
+        .then((value) => userMoney = value.get('money'));
+    userMoney =
+        '${double.parse(money) - double.parse(widget.data['money'].toString())}';
+    await _firestore.collection('profile').doc(uid).update({
+      'money': userMoney,
+      'transaction': FieldValue.arrayUnion([
+        {
+          'uid': userUID,
+          'money': widget.data['money'],
+          'send': false,
+          'time': DateTime.now(),
+          'rollNo': widget.data['uid'],
+        }
+      ])
+    });
+    //
+    var room = _firestore.collection('chatRoom').get();
+    List users;
+    bool found = false;
+    String chatRoom = '';
+    room.then((value) => {
+          value.docs.forEach((element) {
+            users = element.id.split('-');
+            if (users.contains(widget.data['uid']) && users.contains(rollno)) {
+              print('enter in chatRom++++++++++++++++++++++++++++++++++++++++');
+              found = true;
+              sendMessage(element.id, uid);
+              return;
+            }
+          }),
+          if (!found)
+            {
+              createRoom(
+                  rollno: rollno,
+                  userRollno: widget.data['uid'],
+                  userUid: userUID)
+            }
+        });
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => Chats()));
+  }
+
+  sendMessage(id, uid) {
+    _firestore.collection('chatRoom').doc(id).update({
+      'chats': FieldValue.arrayUnion([
+        {
+          'message': '',
+          'money': widget.data['money'],
+          'send': false,
+          'moneyBool': true,
+          'time': DateTime.now(),
+          'uid': uid,
+        }
+      ])
+    });
+  }
+
+  createRoom(
+      {required String? userUid,
+      required String? userRollno,
+      required String? rollno}) async {
+    String? uid = preferenceHelper.preferences.getString('uid');
+    String? name = preferenceHelper.preferences.getString('name');
+
+    DocumentReference snap =
+        _firestore.collection('chatRoom').doc('$rollno-$userRollno');
     snap.set({
       'chats': [],
     });
     _firestore.collection('profile').doc(uid).update({
       'feed': FieldValue.arrayUnion([
-        {'name': '', 'uid': snap.id, 'userUid': ''}
+        {'name': userName, 'uid': snap.id, 'userUid': userUID}
       ])
     });
-    _firestore.collection('profile').doc('').update({
+    _firestore.collection('profile').doc(userUID).update({
       'feed': FieldValue.arrayUnion([
-        {'name': '', 'uid': snap.id, 'userUid': ''}
+        {'name': name, 'uid': snap.id, 'userUid': uid}
       ])
     });
+    sendMessage(snap.id, uid);
+    return snap.id;
   }
 
   BoxDecoration get _pinPutDecoration {
@@ -43,6 +159,12 @@ class _PinScreenState extends State<PinScreen> {
       border: Border.all(color: Colors.deepPurpleAccent),
       borderRadius: BorderRadius.circular(15.0),
     );
+  }
+
+  @override
+  void initState() {
+    getPin();
+    super.initState();
   }
 
   @override
@@ -61,8 +183,13 @@ class _PinScreenState extends State<PinScreen> {
                       margin: const EdgeInsets.all(20.0),
                       padding: const EdgeInsets.all(20.0),
                       child: PinPut(
-                        fieldsCount: 5,
-                        onSubmit: (String pin) => _showSnackBar(pin, context),
+                        fieldsCount: 6,
+                        onSubmit: (String pin) {
+                          if (userPin == pin) {
+                            sendMoney(context);
+                          }
+                          // _showSnackBar(pin, context);
+                        },
                         focusNode: _pinPutFocusNode,
                         controller: _pinPutController,
                         submittedFieldDecoration: _pinPutDecoration.copyWith(
@@ -85,14 +212,14 @@ class _PinScreenState extends State<PinScreen> {
         ));
   }
 
-  void _showSnackBar(String pin, BuildContext context) {
+  void _showSnackBar(String message, BuildContext context) {
     final snackBar = SnackBar(
       duration: const Duration(seconds: 3),
       content: Container(
         height: 80.0,
         child: Center(
           child: Text(
-            'Pin Submitted. Value: $pin',
+            message,
             style: const TextStyle(fontSize: 25.0),
           ),
         ),
