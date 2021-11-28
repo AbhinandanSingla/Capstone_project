@@ -77,6 +77,10 @@ class _AddMoneyState extends State<AddMoney> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text('Add Money'),
+          backgroundColor: Colors.black,elevation: 1,
+        ),
         body: Padding(
           padding: EdgeInsets.all(15),
           child: Column(children: <Widget>[

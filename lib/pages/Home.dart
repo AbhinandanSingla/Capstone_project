@@ -217,9 +217,9 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (ctx) => SendMoney('101856005')));
-                            // scanBarcodeNormal();
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (ctx) => SendMoney(_scanBarcode)));
+                            scanBarcodeNormal();
                             // Navigator.push(context,
                             //     MaterialPageRoute(builder: (context) => bc()));
                           },

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
 import 'package:flutter_login_signup/pages/chats.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 class PinScreen extends StatefulWidget {
@@ -52,6 +53,7 @@ class _PinScreenState extends State<PinScreen> {
     if (double.parse(money) < double.parse(widget.data['money'].toString())) {
       return _showSnackBar('Money is insufficient in wallet', ctx);
     }
+    String? name = preferenceHelper.preferences.getString('name');
 
     money =
         '${double.parse(money) - double.parse(widget.data['money'].toString())}';
@@ -64,6 +66,7 @@ class _PinScreenState extends State<PinScreen> {
           'send': true,
           'time': DateTime.now(),
           'rollNo': widget.data['uid'],
+          'name': name,
         }
       ])
     });
@@ -84,6 +87,7 @@ class _PinScreenState extends State<PinScreen> {
           'send': false,
           'time': DateTime.now(),
           'rollNo': widget.data['uid'],
+          'name': userName
         }
       ])
     });
@@ -119,7 +123,7 @@ class _PinScreenState extends State<PinScreen> {
         {
           'message': '',
           'money': widget.data['money'],
-          'send': false,
+          'send': true,
           'moneyBool': true,
           'time': DateTime.now(),
           'uid': uid,
@@ -170,6 +174,10 @@ class _PinScreenState extends State<PinScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text('Enter Pin'),
+          backgroundColor: Colors.black,
+        ),
         backgroundColor: Colors.white,
         body: Builder(
           builder: (context) {
@@ -178,6 +186,12 @@ class _PinScreenState extends State<PinScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    Text(
+                      'Enter Your Secrete Pin',
+                      style: GoogleFonts.roboto(
+                        fontSize: 35,
+                      ),
+                    ),
                     Container(
                       color: Colors.white,
                       margin: const EdgeInsets.all(20.0),
@@ -204,6 +218,21 @@ class _PinScreenState extends State<PinScreen> {
                         ),
                       ),
                     ),
+                    RaisedButton(
+                        textColor: Colors.white,
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          'Confirm to Add',
+                          style: TextStyle(fontSize: 22.0),
+                        ),
+                        onPressed: () {
+                          if (userPin == _pinPutController.value.text) {
+                            sendMoney(context);
+                          }
+                          // showAlertDialog(context);
+                        }),
                   ],
                 ),
               ),

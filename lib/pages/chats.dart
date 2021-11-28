@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
 import 'package:flutter_login_signup/Service/AuthenticationService.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'chat_room.dart';
 
@@ -94,10 +95,13 @@ class _ChatsState extends State<Chats> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       ChatRoom(feedList[index]['uid']))),
-                          title: Text(feedName),
+                          title: Text(feedName,style: GoogleFonts.openSans(fontSize: 18),),
                           leading: CircleAvatar(
-                            child:
-                                Text(feedName.characters.first.toUpperCase()),
+                            backgroundColor: Colors.orangeAccent,
+                            child: Text(
+                              feedName.characters.first.toUpperCase(),
+                              style: GoogleFonts.roboto(color: Colors.white),
+                            ),
                           ),
                           // subtitle: Text('Last Message'),
                         );

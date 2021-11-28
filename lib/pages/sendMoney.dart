@@ -38,6 +38,10 @@ class _SendMoneyState extends State<SendMoney> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: Text('Receive Money'),
+        ),
         body: Padding(
           padding: EdgeInsets.all(15),
           child: Column(children: <Widget>[
@@ -90,7 +94,7 @@ class _SendMoneyState extends State<SendMoney> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  'Confirm to send',
+                  'Receive',
                   style: TextStyle(fontSize: 22.0),
                 ),
                 onPressed: () {

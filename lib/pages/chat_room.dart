@@ -53,10 +53,11 @@ class _ChatRoomState extends State<ChatRoom> {
     String? uid = preferenceHelper.preferences.getString('uid');
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.black87,
       appBar: AppBar(
         title: Text('ChatRoom'),
-        backgroundColor: Colors.black87,
+        backgroundColor: Color(0xff252331),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -69,8 +70,12 @@ class _ChatRoomState extends State<ChatRoom> {
                     .snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  DocumentSnapshot doc = snapshot.data;
-                  chats = doc.get('chats');
+                  if (snapshot.hasData) {
+                    DocumentSnapshot doc = snapshot.data;
+                    chats = doc.get('chats');
+                  } else {
+                    return Container();
+                  }
                   return ListView.builder(
                     itemCount: chats.length,
                     shrinkWrap: true,
@@ -79,6 +84,55 @@ class _ChatRoomState extends State<ChatRoom> {
                       var alignment = MainAxisAlignment.start;
                       if (chats[index]['uid'] == uid) {
                         alignment = MainAxisAlignment.end;
+                        if (chats[index]['moneyBool']) {
+                          return SizedBox(
+                            width: size.width,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: alignment,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 3, bottom: 3),
+                                  padding: const EdgeInsets.only(
+                                      top: 8, bottom: 8, left: 20, right: 20),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        chats[index]['money'],
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.roboto(
+                                            fontSize: 30, color: Colors.white),
+                                      ),
+                                      Text(
+                                        chats[index]['send']
+                                            ? 'Sent'
+                                            : 'Recevied',
+                                        style: GoogleFonts.openSans(
+                                            color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
+                                    // gradient: LinearGradient(
+                                    //     colors: [
+                                    //       Color(0xffFFFF00).withOpacity(0.3),
+                                    //       Color(0xff00BCD4).withOpacity(0.5),
+                                    //       Color(0xffEE82EE),
+                                    //     ],
+                                    //     begin: Alignment.topLeft,
+                                    //     end: Alignment.bottomRight),
+                                    color: Colors.orangeAccent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                Image.asset(
+                                  'images/tick.png',
+                                  width: 15,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                         return SizedBox(
                           width: size.width,
                           child: Row(
@@ -104,8 +158,11 @@ class _ChatRoomState extends State<ChatRoom> {
                                   //     ],
                                   //     begin: Alignment.topLeft,
                                   //     end: Alignment.bottomRight),
-                                  color: Colors.deepPurpleAccent,
-                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.orangeAccent,
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                      topLeft: Radius.circular(10)),
                                 ),
                               ),
                               Image.asset(
@@ -116,6 +173,53 @@ class _ChatRoomState extends State<ChatRoom> {
                           ),
                         );
                       }
+                      if (chats[index]['moneyBool']) {
+                        return SizedBox(
+                          width: size.width,
+                          child: Row(
+                            mainAxisAlignment: alignment,
+                            children: [
+                              const Icon(Icons.account_circle_rounded),
+                              Container(
+                                height: 70,
+                                margin: EdgeInsets.only(top: 3, bottom: 3),
+                                padding: const EdgeInsets.only(
+                                    top: 8, bottom: 8, left: 20, right: 20),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      chats[index]['money'],
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 30, color: Colors.white),
+                                    ),
+                                    Text(
+                                      chats[index]['send']
+                                          ? 'Received'
+                                          : 'Sent',
+                                      style: GoogleFonts.openSans(
+                                          color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                  // gradient: LinearGradient(
+                                  //     colors: [
+                                  //       Color(0xffFFFF00).withOpacity(0.3),
+                                  //       Color(0xff00BCD4).withOpacity(0.5),
+                                  //       Color(0xffEE82EE),
+                                  //     ],
+                                  //     begin: Alignment.topLeft,
+                                  //     end: Alignment.bottomRight),
+                                  color: Color(0xff343145),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
                       return SizedBox(
                         width: size.width,
                         child: Row(
@@ -123,17 +227,21 @@ class _ChatRoomState extends State<ChatRoom> {
                           children: [
                             const Icon(Icons.account_circle_rounded),
                             Container(
+                              margin: EdgeInsets.only(top: 2, bottom: 2),
                               padding: const EdgeInsets.only(
                                   top: 8, bottom: 8, left: 20, right: 20),
                               child: Text(
                                 chats[index]['message'],
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.roboto(
+                                style: GoogleFonts.workSans(
                                     fontSize: 20, color: Colors.white),
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.deepPurpleAccent,
-                                borderRadius: BorderRadius.circular(20),
+                                color: Color(0xff343145),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                    topLeft: Radius.circular(10)),
                               ),
                             ),
                           ],
@@ -142,12 +250,16 @@ class _ChatRoomState extends State<ChatRoom> {
                     },
                   );
                 },
-              )
+              ),
+              SizedBox(
+                height: 100,
+              ),
             ],
           ),
         ),
       ),
       bottomSheet: BottomSheet(
+        backgroundColor: Color(0xff252331),
         builder: (ctx) => Container(
           height: 60,
           child: Form(
@@ -179,14 +291,17 @@ class _ChatRoomState extends State<ChatRoom> {
                     ),
                     GestureDetector(
                         onTap: () => {
-                              sendChat(message: {
-                                'message': _message.value.text,
-                                'uid': uid,
-                                'time': DateTime.now(),
-                                'money': 0,
-                                'send': false,
-                                'moneyBool': false,
-                              }, id: widget.id),
+                              if (_message.value.text.isNotEmpty)
+                                {
+                                  sendChat(message: {
+                                    'message': _message.value.text,
+                                    'uid': uid,
+                                    'time': DateTime.now(),
+                                    'money': 0,
+                                    'send': false,
+                                    'moneyBool': false,
+                                  }, id: widget.id),
+                                },
                               _message.clear()
                             },
                         child: Image.asset(
