@@ -69,27 +69,6 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  // Widget _label() {
-  //   return Container(
-  //       margin: EdgeInsets.only(top: 40, bottom: 20),
-  //       child: Column(
-  //         children: <Widget>[
-  //           Text(
-  //             'Quick login with Touch ',
-  //             style: TextStyle(color: Colors.indigo[900], fontSize: 17),
-  //           ),
-  //           SizedBox(
-  //             height: 20,
-  //           ),
-  //           Icon(Icons.fingerprint, size: 90, color: Colors.indigo[900]),
-  //           SizedBox(
-  //             height: 20,
-  //           ),
-  //
-  //         ],
-  //       ));
-  // }
-
   Widget _title() {
     return RichText(
       textAlign: TextAlign.start,
@@ -148,7 +127,6 @@ class _WelcomePageState extends State<WelcomePage> {
               SizedBox(
                 height: 40,
               ),
-              // _label()
             ],
           ),
         ),

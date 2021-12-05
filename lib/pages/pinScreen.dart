@@ -23,6 +23,7 @@ class _PinScreenState extends State<PinScreen> {
 
   _PinScreenState(data);
 
+  bool visible = false;
   String? userPin;
   String? userUID;
   String? userName;
@@ -33,13 +34,20 @@ class _PinScreenState extends State<PinScreen> {
         .where('rollNo', isEqualTo: widget.data['uid'])
         .get()
         .then((value) {
-      userUID = value.docs[0].id;
-      userPin = value.docs[0].get('pin');
-      userName = value.docs[0].get('name');
+      if (value.docs.isEmpty) {
+        _showSnackBar('Invalid User', context);
+      } else {
+        userUID = value.docs[0].id;
+        userPin = value.docs[0].get('pin');
+        userName = value.docs[0].get('name');
+      }
     });
   }
 
   sendMoney(ctx) async {
+    setState(() {
+      visible = true;
+    });
     String? uid = preferenceHelper.preferences.getString('uid');
     String? rollno = preferenceHelper.preferences.getString('rollno');
     String money = '';
@@ -91,7 +99,7 @@ class _PinScreenState extends State<PinScreen> {
         }
       ])
     });
-    //
+
     var room = _firestore.collection('chatRoom').get();
     List users;
     bool found = false;
@@ -114,6 +122,9 @@ class _PinScreenState extends State<PinScreen> {
                   userUid: userUID)
             }
         });
+    setState(() {
+      visible = false;
+    });
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => Chats()));
   }
 
@@ -183,56 +194,71 @@ class _PinScreenState extends State<PinScreen> {
           builder: (context) {
             return Center(
               child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Enter Your Secrete Pin',
-                      style: GoogleFonts.roboto(
-                        fontSize: 35,
-                      ),
-                    ),
-                    Container(
-                      color: Colors.white,
-                      margin: const EdgeInsets.all(20.0),
-                      padding: const EdgeInsets.all(20.0),
-                      child: PinPut(
-                        fieldsCount: 6,
-                        onSubmit: (String pin) {
-                          if (userPin == pin) {
-                            sendMoney(context);
-                          }
-                          // _showSnackBar(pin, context);
-                        },
-                        focusNode: _pinPutFocusNode,
-                        controller: _pinPutController,
-                        submittedFieldDecoration: _pinPutDecoration.copyWith(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        selectedFieldDecoration: _pinPutDecoration,
-                        followingFieldDecoration: _pinPutDecoration.copyWith(
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(
-                            color: Colors.deepPurpleAccent.withOpacity(.5),
+                child: Stack(
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          'Enter Your Secrete Pin',
+                          style: GoogleFonts.roboto(
+                            fontSize: 35,
                           ),
                         ),
-                      ),
-                    ),
-                    RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.black,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Text(
-                          'Confirm to Add',
-                          style: TextStyle(fontSize: 22.0),
+                        Container(
+                          color: Colors.white,
+                          margin: const EdgeInsets.all(20.0),
+                          padding: const EdgeInsets.all(20.0),
+                          child: PinPut(
+                            fieldsCount: 6,
+                            onSubmit: (String pin) {
+                              if (userPin == pin) {
+                                sendMoney(context);
+                              } else {
+                                _showSnackBar('Entered Wrong Pin', context);
+                              }
+                            },
+                            focusNode: _pinPutFocusNode,
+                            controller: _pinPutController,
+                            submittedFieldDecoration:
+                                _pinPutDecoration.copyWith(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            selectedFieldDecoration: _pinPutDecoration,
+                            followingFieldDecoration:
+                                _pinPutDecoration.copyWith(
+                              borderRadius: BorderRadius.circular(5.0),
+                              border: Border.all(
+                                color: Colors.deepPurpleAccent.withOpacity(.5),
+                              ),
+                            ),
+                          ),
                         ),
-                        onPressed: () {
-                          if (userPin == _pinPutController.value.text) {
-                            sendMoney(context);
-                          }
-                          // showAlertDialog(context);
-                        }),
+                        RaisedButton(
+                            textColor: Colors.white,
+                            color: Colors.black,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Text(
+                              'Confirm to Add',
+                              style: TextStyle(fontSize: 22.0),
+                            ),
+                            onPressed: () {
+                              if (userPin == _pinPutController.value.text) {
+                                sendMoney(context);
+                              } else {
+                                _showSnackBar('Entered Wrong Pin', context);
+                              }
+                            }),
+                      ],
+                    ),
+                    Visibility(
+                        visible: visible,
+                        child: Container(
+                          alignment: Alignment.center,
+                          color: Colors.white.withOpacity(0.5),
+                          child: CircularProgressIndicator(),
+                        ))
                   ],
                 ),
               ),

@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
+import 'package:flutter_login_signup/Service/AuthenticationService.dart';
+import 'package:flutter_login_signup/Service/preference.dart';
+import 'package:flutter_login_signup/pages/ProfileUI1.dart';
+
 import 'ProfileUI1.dart';
 import 'loginPage.dart';
-import 'package:flutter_login_signup/Service/AuthenticationService.dart';
-import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
-import 'package:flutter_login_signup/pages/ProfileUI1.dart';
 
 class SettingsUI extends StatelessWidget {
   @override
@@ -27,30 +29,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
   dynamic uid;
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController _nameController = TextEditingController();
+
   TextEditingController rollNoController = TextEditingController();
 
-  late String name;
-  late String rollNo;
+  late String? name;
+  late String? rollNo;
   late String money;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    fetchUserInfo();
+    name = preferenceHelper.preferences.getString('name');
+    rollNo = preferenceHelper.preferences.getString('rollno');
+    uid = preferenceHelper.preferences.getString('uid');
+
+    // fetchUserInfo();
   }
 
-  fetchUserInfo() async{
+  fetchUserInfo() async {
     uid = await _auth.getCurrentUID();
     print(uid);
-}
+  }
 
   Future<void> fetchDatabaseList() async {
-
     uid = await _auth.getCurrentUID();
     if (uid == null) {
       print("UID is NULL");
-    }
-    else {
+    } else {
       print("uid-$uid");
       DatabaseManager databaseManager = DatabaseManager(uid: uid);
       DocumentSnapshot resultant = await databaseManager.getUsersList();
@@ -72,8 +77,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
-  updateData(String name, String rollNo, String money , String userID) async {
-    await DatabaseManager().updateUserList(name, rollNo, money ,  userID);
+  updateData(String name, String rollNo, String userID) async {
+    await DatabaseManager().updateProfile(name, rollNo, userID);
     fetchDatabaseList();
   }
 
@@ -88,7 +93,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => Settings1()));},
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Settings1()));
+          },
         ),
         actions: [
           IconButton(
@@ -97,7 +105,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+              preferenceHelper.login(false);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoginPage()));
             },
           ),
         ],
@@ -158,7 +168,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               Icons.edit,
                               color: Colors.white,
                             ),
-                            onTap: (){},
+                            onTap: () {},
                           ),
                         )),
                   ],
@@ -176,10 +186,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(
                 height: 5,
               ),
-              TextField(
-                controller: rollNoController,
-                decoration: InputDecoration(hintText: 'RollNo'),
-              ),
+              // TextField(
+              //   controller: rollNoController,
+              //   enabled: false,
+              //   decoration: InputDecoration(hintText: 'RollNo'),
+              // ),
               SizedBox(
                 height: 5,
               ),
@@ -189,7 +200,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   RaisedButton(
                     onPressed: () {
                       submitAction(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Settings1()));},
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Settings1()));
+                    },
                     color: Colors.black,
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     elevation: 2,
@@ -204,7 +217,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                   RaisedButton(
-                    onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => Settings1()));},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Settings1()));
+                    },
                     color: Colors.black,
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     elevation: 2,
@@ -227,42 +243,42 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-   submitAction(BuildContext context) {
-     updateData(_nameController.text, rollNoController.text, money , uid);
-     _nameController.clear();
-     rollNoController.clear();
-   }
+  submitAction(BuildContext context) {
+    updateData(_nameController.text, rollNo!, uid);
+    _nameController.clear();
+    rollNoController.clear();
+  }
 
-  // Widget buildTextField(
-  //     String labelText, String placeholder, bool isPasswordTextField) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(bottom: 35.0),
-  //     child: TextField(
-  //       obscureText: isPasswordTextField ? showPassword : false,
-  //       decoration: InputDecoration(
-  //           suffixIcon: isPasswordTextField
-  //               ? IconButton(
-  //             onPressed: () {
-  //               setState(() {
-  //                 showPassword = !showPassword;
-  //               });
-  //             },
-  //             icon: Icon(
-  //               Icons.remove_red_eye,
-  //               color: Colors.grey,
-  //             ),
-  //           )
-  //               : null,
-  //           contentPadding: EdgeInsets.only(bottom: 3),
-  //           labelText: labelText,
-  //           floatingLabelBehavior: FloatingLabelBehavior.always,
-  //           hintText: placeholder,
-  //           hintStyle: TextStyle(
-  //             fontSize: 16,
-  //             fontWeight: FontWeight.bold,
-  //             color: Colors.black,
-  //           )),
-  //     ),
-  //   );
-  // }
+// Widget buildTextField(
+//     String labelText, String placeholder, bool isPasswordTextField) {
+//   return Padding(
+//     padding: const EdgeInsets.only(bottom: 35.0),
+//     child: TextField(
+//       obscureText: isPasswordTextField ? showPassword : false,
+//       decoration: InputDecoration(
+//           suffixIcon: isPasswordTextField
+//               ? IconButton(
+//             onPressed: () {
+//               setState(() {
+//                 showPassword = !showPassword;
+//               });
+//             },
+//             icon: Icon(
+//               Icons.remove_red_eye,
+//               color: Colors.grey,
+//             ),
+//           )
+//               : null,
+//           contentPadding: EdgeInsets.only(bottom: 3),
+//           labelText: labelText,
+//           floatingLabelBehavior: FloatingLabelBehavior.always,
+//           hintText: placeholder,
+//           hintStyle: TextStyle(
+//             fontSize: 16,
+//             fontWeight: FontWeight.bold,
+//             color: Colors.black,
+//           )),
+//     ),
+//   );
+// }
 }

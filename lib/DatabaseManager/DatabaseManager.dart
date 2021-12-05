@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_login_signup/Service/preference.dart';
 
 class DatabaseManager {
   final String? uid;
@@ -28,20 +29,19 @@ class DatabaseManager {
         .update({'name': name, 'rollNo': rollNumber, 'money': money});
   }
 
-  Future getUsersList() async {
-    // List itemsList = [];
+  Future updateProfile(String name, String rollNumber, String uid) async {
+    preferenceHelper.preferences.setString('name', name);
+    preferenceHelper.preferences.setString('rollno', rollNumber);
+    return await profile.doc(uid).update({
+      'name': name,
+      'rollNo': rollNumber,
+    });
+  }
 
+  Future getUsersList() async {
     try {
-      // await profile.get().then((querySnapshot) {
-      //   querySnapshot.docs.forEach((element) {
-      //     itemsList.add(element.data);
-      //   });
-      // });
       DocumentSnapshot itemsList = await profile.doc(uid).get();
       return itemsList;
-      String name = itemsList.get('name');
-      String rollNo = itemsList.get('rollNo');
-      return [name, rollNo];
     } catch (e) {
       print(e.toString());
       return null;

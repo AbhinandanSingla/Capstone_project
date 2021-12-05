@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   late String _email, _password;
 
   late String _error;
+  bool visible = false;
 
   bool validate() {
     final form = _key.currentState;
@@ -45,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
-        // color: Colors.deepPurple,
         height: height,
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -62,120 +62,126 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Form(
             key: _key,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
+            child: Stack(
               children: [
-                Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.indigo[900],
-                    fontSize: 50,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _emailContoller,
-                        validator: (value) {
-                          if (value!.isEmpty || !value.contains("@")) {
-                            return 'Email is invalid';
-                          } else
-                            return null;
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Email',
-                            labelStyle: TextStyle(
-                              color: Colors.indigo[900],
-                              fontSize: 17,
-                            )),
-                        style: TextStyle(color: Colors.black),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.indigo[900],
+                        fontSize: 50,
+                        fontWeight: FontWeight.w900,
                       ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        validator: (value) {
-                          if (value!.isEmpty || value.length < 6) {
-                            return 'Password is invalid';
-                          } else
-                            return null;
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Password',
-                            labelStyle: TextStyle(
-                              color: Colors.indigo[900],
-                              fontSize: 17,
-                            )),
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Column(
                         children: [
-                          TextButton(
-                            child: Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                              ),
-                            ),
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => ResetScreen()),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      FlatButton(
-                        child: Text(
-                          'Not registerd? Sign up',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 13,
+                          SizedBox(height: 30),
+                          TextFormField(
+                            controller: _emailContoller,
+                            validator: (value) {
+                              if (value!.isEmpty || !value.contains("@")) {
+                                return 'Email is invalid';
+                              } else
+                                return null;
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'Email',
+                                labelStyle: TextStyle(
+                                  color: Colors.indigo[900],
+                                  fontSize: 17,
+                                )),
+                            style: TextStyle(color: Colors.black),
                           ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            CupertinoPageRoute(
-                              fullscreenDialog: true,
-                              builder: (context) => SignUpPage(),
+                          SizedBox(height: 30),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            validator: (value) {
+                              if (value!.isEmpty || value.length < 6) {
+                                return 'Password is invalid';
+                              } else
+                                return null;
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'Password',
+                                labelStyle: TextStyle(
+                                  color: Colors.indigo[900],
+                                  fontSize: 17,
+                                )),
+                            style: TextStyle(
+                              color: Colors.black,
                             ),
-                          );
-                        },
-                        textColor: Colors.white,
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                child: Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => ResetScreen()),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20),
                           FlatButton(
                             child: Text(
-                              'Login',
+                              'Not registerd? Sign up',
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 17,
+                                fontSize: 13,
                               ),
                             ),
-                            onPressed: () => signInUser(),
-                            // if (_key.currentState.validate()) {
-                            //   signInUser();
-                            // }
-                            // },
-                            color: Colors.white,
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                  fullscreenDialog: true,
+                                  builder: (context) => SignUpPage(),
+                                ),
+                              );
+                            },
+                            textColor: Colors.white,
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FlatButton(
+                                child: Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                onPressed: () => signInUser(),
+                                color: Colors.white,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+                Visibility(
+                    visible: visible,
+                    child: Container(
+                        color: Colors.white.withOpacity(0.5),
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator()))
               ],
             ),
           ),
@@ -187,6 +193,9 @@ class _LoginPageState extends State<LoginPage> {
   void signInUser() async {
     if (validate()) {
       try {
+        setState(() {
+          visible = true;
+        });
         dynamic authResult = await _auth.loginUser(
             _emailContoller.text, _passwordController.text);
         if (authResult == null) {
@@ -194,27 +203,37 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           _emailContoller.clear();
           _passwordController.clear();
+          setState(() {
+            visible = false;
+          });
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (ctx) => Home()));
         }
       } catch (e) {
         setState(() {
+          _showSnackBar(e.toString(), context);
           _error = e.toString();
         });
       }
     }
   }
 
-// signInUser() async {
-//   try {
-//     //Create Get Firebase Auth User
-//     await auth.signInWithEmailAndPassword(email: _emailContoller.text, password : _passwordController.text);
-//
-//     //Success
-//     Navigator.pushNamed(context, '/Home');
-//
-//   } on FirebaseAuthException catch (error) {
-//     return Fluttertoast.showToast(msg: error.message,gravity: ToastGravity.TOP);
-//   }
-
+  void _showSnackBar(String message, BuildContext context) {
+    final snackBar = SnackBar(
+      duration: const Duration(seconds: 3),
+      content: Container(
+        height: 80.0,
+        child: Center(
+          child: Text(
+            message,
+            style: const TextStyle(fontSize: 25.0),
+          ),
+        ),
+      ),
+      backgroundColor: Colors.deepPurpleAccent,
+    );
+    Scaffold.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
 }

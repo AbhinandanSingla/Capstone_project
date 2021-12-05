@@ -42,14 +42,11 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // getChats(widget.id);
   }
 
   @override
   Widget build(BuildContext context) {
-    // getChats(widget.id);
     String? uid = preferenceHelper.preferences.getString('uid');
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -113,14 +110,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                     ],
                                   ),
                                   decoration: BoxDecoration(
-                                    // gradient: LinearGradient(
-                                    //     colors: [
-                                    //       Color(0xffFFFF00).withOpacity(0.3),
-                                    //       Color(0xff00BCD4).withOpacity(0.5),
-                                    //       Color(0xffEE82EE),
-                                    //     ],
-                                    //     begin: Alignment.topLeft,
-                                    //     end: Alignment.bottomRight),
                                     color: Colors.orangeAccent,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -150,14 +139,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                       fontSize: 20, color: Colors.white),
                                 ),
                                 decoration: BoxDecoration(
-                                  // gradient: LinearGradient(
-                                  //     colors: [
-                                  //       Color(0xffFFFF00).withOpacity(0.3),
-                                  //       Color(0xff00BCD4).withOpacity(0.5),
-                                  //       Color(0xffEE82EE),
-                                  //     ],
-                                  //     begin: Alignment.topLeft,
-                                  //     end: Alignment.bottomRight),
                                   color: Colors.orangeAccent,
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(10),
@@ -203,14 +184,6 @@ class _ChatRoomState extends State<ChatRoom> {
                                   ],
                                 ),
                                 decoration: BoxDecoration(
-                                  // gradient: LinearGradient(
-                                  //     colors: [
-                                  //       Color(0xffFFFF00).withOpacity(0.3),
-                                  //       Color(0xff00BCD4).withOpacity(0.5),
-                                  //       Color(0xffEE82EE),
-                                  //     ],
-                                  //     begin: Alignment.topLeft,
-                                  //     end: Alignment.bottomRight),
                                   color: Color(0xff343145),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -319,7 +292,6 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _message.dispose();
   }

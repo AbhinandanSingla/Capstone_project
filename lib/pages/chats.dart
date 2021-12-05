@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
 import 'package:flutter_login_signup/Service/AuthenticationService.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
+import 'package:flutter_login_signup/pages/adminRoom.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'chat_room.dart';
@@ -45,13 +46,8 @@ class _ChatsState extends State<Chats> {
         print('Unable to retrieve');
       } else {
         setState(() {
-          // print(resultant);
           name = resultant.get('name');
           rollNo = resultant.get('rollNo');
-          // String name = resultant.g;
-          // String rollNo = resultant[1];
-          // print("name = $name");
-          // print("rollNor = $rollNo");
         });
       }
     }
@@ -62,13 +58,61 @@ class _ChatsState extends State<Chats> {
     String? uuid = preferenceHelper.preferences.getString('uid');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title: Text('Chats'),
+        backgroundColor: Color(0xff252331),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Chats',
+                        style: GoogleFonts.roboto(
+                            fontSize: 30, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showSearch(
+                            context: context, delegate: NameSearch(feedList));
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        margin: EdgeInsets.only(right: 8),
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Color(0xff252331),
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              ListTile(
+                onTap: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => AdminRoom())),
+                title: Text(
+                  'Admin Messages',
+                  style: GoogleFonts.openSans(fontSize: 18),
+                ),
+                leading: CircleAvatar(
+                  backgroundColor: Color(0xff252331),
+                  child: Text(
+                    'AD',
+                    style: GoogleFonts.roboto(color: Colors.white),
+                  ),
+                ),
+              ),
               StreamBuilder(
                 stream: firestore.collection('profile').doc(uuid).snapshots(),
                 builder:
@@ -95,15 +139,17 @@ class _ChatsState extends State<Chats> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       ChatRoom(feedList[index]['uid']))),
-                          title: Text(feedName,style: GoogleFonts.openSans(fontSize: 18),),
+                          title: Text(
+                            feedName,
+                            style: GoogleFonts.openSans(fontSize: 18),
+                          ),
                           leading: CircleAvatar(
-                            backgroundColor: Colors.orangeAccent,
+                            backgroundColor: Color(0xff252331),
                             child: Text(
                               feedName.characters.first.toUpperCase(),
                               style: GoogleFonts.roboto(color: Colors.white),
                             ),
                           ),
-                          // subtitle: Text('Last Message'),
                         );
                       });
                 },
@@ -112,6 +158,107 @@ class _ChatsState extends State<Chats> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class NameSearch extends SearchDelegate {
+  final List names;
+  String result = '';
+
+  NameSearch(this.names);
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, result);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final suggestion = names.where((element) {
+      return element['name'].toLowerCase().contains(query.toLowerCase());
+    });
+    return ListView.builder(
+      itemCount: suggestion.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          onTap: () {
+            result = suggestion.elementAt(index)['name'];
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    ChatRoom(suggestion.elementAt(index)['uid'])));
+          },
+          title: Text(
+            suggestion.elementAt(index)['name'],
+            style: GoogleFonts.openSans(fontSize: 18),
+          ),
+          leading: CircleAvatar(
+            backgroundColor: Color(0xff252331),
+            child: Text(
+              suggestion
+                  .elementAt(index)['name']
+                  .toString()
+                  .characters
+                  .first
+                  .toUpperCase(),
+              style: GoogleFonts.roboto(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestion = names.where((element) {
+      return element['name'].toLowerCase().contains(query.toLowerCase());
+    });
+    return ListView.builder(
+      itemCount: suggestion.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          onTap: () {
+            query = suggestion.elementAt(index)['name'];
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    ChatRoom(suggestion.elementAt(index)['uid'])));
+          },
+          title: Text(
+            suggestion.elementAt(index)['name'],
+            style: GoogleFonts.openSans(fontSize: 18),
+          ),
+          leading: CircleAvatar(
+            backgroundColor: Color(0xff252331),
+            child: Text(
+              suggestion
+                  .elementAt(index)['name']
+                  .toString()
+                  .characters
+                  .first
+                  .toUpperCase(),
+              style: GoogleFonts.roboto(color: Colors.white),
+            ),
+          ),
+        );
+      },
     );
   }
 }

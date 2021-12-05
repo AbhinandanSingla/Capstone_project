@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/DatabaseManager/DatabaseManager.dart';
 import 'package:flutter_login_signup/Service/AuthenticationService.dart';
+import 'package:flutter_login_signup/Service/preference.dart';
 
 import 'Home.dart';
 import 'ProfileUI2.dart';
@@ -29,15 +30,17 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController rollNoController = TextEditingController();
 
-  // List userProfilesList = [];
-  late String name='';
-  late String rollNo='';
+  late String? name = '';
+  late String? rollNo = '';
   dynamic uid;
 
   @override
   void initState() {
     super.initState();
-    fetchDatabaseList();
+    setState(() {
+      name = preferenceHelper.preferences.getString('name');
+      rollNo = preferenceHelper.preferences.getString('rollno');
+    });
   }
 
   Future<void> fetchDatabaseList() async {
@@ -53,13 +56,8 @@ class _ProfilePageState extends State<ProfilePage> {
         print('Unable to retrieve');
       } else {
         setState(() {
-          // print(resultant);
           name = resultant.get('name');
           rollNo = resultant.get('rollNo');
-          // String name = resultant.g;
-          // String rollNo = resultant[1];
-          // print("name = $name");
-          // print("rollNor = $rollNo");
         });
       }
     }
@@ -103,22 +101,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Stack(
                     children: [
                       Container(
-                        width: 130,
-                        height: 130,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 4,
-                              color: Theme.of(context).scaffoldBackgroundColor),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                        ),
-                      ),
+                          alignment: Alignment.center,
+                          width: 130,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 4,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 10))
+                            ],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.asset('images/profile.png')),
                     ],
                   ),
                 ),
@@ -158,9 +158,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        // print("name = $name");
-                        // print("rollNor = $rollNo");
-                        // print("uid-$uid");
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -182,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     RaisedButton(
                         onPressed: () {
-                          // print(userProfilesList);
+                          preferenceHelper.preferences.setBool('login', false);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -221,22 +218,5 @@ class _ProfilePageState extends State<ProfilePage> {
             )),
       ),
     );
-    //     body: Container(
-    //         child: ListView.builder(
-    //             itemCount: userProfilesList.length,
-    //             itemBuilder: (context, index) {
-    //               return Card(
-    //                 child: ListTile(
-    //                   title: Text(userProfilesList[index]['name']),
-    //                   subtitle: Text(userProfilesList[index]['rollNo']),
-    //                   leading: CircleAvatar(
-    //                     child: Image(
-    //                       image: AssetImage('pay.jpg'),
-    //                     ),
-    //                   ),
-    //                   // trailing: Text('${userProfilesList[index]['score']}'),
-    //                 ),
-    //               );
-    //             })));
   }
 }

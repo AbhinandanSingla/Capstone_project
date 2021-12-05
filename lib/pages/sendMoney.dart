@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_login_signup/Service/AuthenticationService.dart';
+import 'package:flutter_login_signup/Service/preference.dart';
 import 'package:flutter_login_signup/pages/GlobalState.dart';
 import 'package:flutter_login_signup/pages/pinScreen.dart';
 
@@ -19,6 +21,7 @@ class _SendMoneyState extends State<SendMoney> {
   _SendMoneyState(data);
 
   late TextEditingController _money;
+  final AuthenticationService _auth = AuthenticationService();
 
   final TextEditingController t1 = new TextEditingController(text: "0");
   FirebaseFirestore _firebase = FirebaseFirestore.instance;
@@ -29,7 +32,7 @@ class _SendMoneyState extends State<SendMoney> {
     super.initState();
 
     print('${widget.data} ++++++step reached');
-    // fetchDatabaseList();
+
     _money = TextEditingController();
     _store.set('money', '');
     _money.text = _store.get('money');
@@ -45,24 +48,21 @@ class _SendMoneyState extends State<SendMoney> {
         body: Padding(
           padding: EdgeInsets.all(15),
           child: Column(children: <Widget>[
-            //new Text('${_store.get('name')}'),
             SizedBox(height: 30),
             CircleAvatar(
               backgroundImage: AssetImage('images/addmoney.PNG'),
               radius: 70,
             ),
-            //Text('${_store.get('value')}'),
             SizedBox(height: 50),
             Padding(
               padding: EdgeInsets.all(15),
               child: TextField(
                 controller: _money,
-
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(3),
                   LimitRangeTextInputFormatter(0, 500),
                 ],
-
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Enter Amount',
@@ -77,17 +77,9 @@ class _SendMoneyState extends State<SendMoney> {
                         _money.clear();
                       }),
                 ),
-                //onChanged: (var text){
-                //  setState((){
-                // value = text;
-                //  });
-
-                //},
               ),
             ),
-
             SizedBox(height: 20),
-
             RaisedButton(
                 textColor: Colors.white,
                 color: Colors.black,
@@ -98,32 +90,12 @@ class _SendMoneyState extends State<SendMoney> {
                   style: TextStyle(fontSize: 22.0),
                 ),
                 onPressed: () {
+                  String? uid = preferenceHelper.preferences.getString('uid');
+                  _auth.addMoney(uid!, _money.value.text);
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => PinScreen(
                           {'money': _money.value.text, 'uid': widget.data})));
-                  // showAlertDialog(context);
-                  // submitAction(context);
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (BuildContext context) =>
-                  //             new WalletApp(money: _money.text)));
                 }),
-            //SizedBox(height:10),
-            // RaisedButton(
-            //   textColor: Colors.white,
-            //   color: Colors.black,
-            //   shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(10)),
-            //
-            //   child: Text('Click to check balance',
-            //     style: TextStyle(fontSize: 22.0),
-            //   ),
-            //   onPressed: () async {
-            //     Navigator.push(context, MaterialPageRoute(
-            //         builder: (context) => WalletApp()));
-            //   },
-            // ),
           ]),
         ));
   }
@@ -135,8 +107,6 @@ class _SendMoneyState extends State<SendMoney> {
 }
 
 class NewScreen extends StatelessWidget {
-  //String value;
-  //NewScreen({this.value});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,15 +144,12 @@ class LimitRangeTextInputFormatter extends TextInputFormatter {
 }
 
 showAlertDialog(BuildContext context) {
-  // Create button
   Widget okButton = FlatButton(
     child: Text("OK"),
     onPressed: () {
       Navigator.of(context).pop();
     },
   );
-
-  // Create AlertDialog
 
   AlertDialog alert = AlertDialog(
     title: Text(
@@ -199,7 +166,6 @@ showAlertDialog(BuildContext context) {
     ],
   );
 
-  // show the dialog
   showDialog(
     context: context,
     builder: (BuildContext context) {

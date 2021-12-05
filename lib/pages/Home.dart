@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
 
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.BARCODE);
@@ -32,21 +32,19 @@ class _HomeState extends State<Home> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
+    if (barcodeScanRes == '-1') {
+      print('cancel');
+    } else {
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (ctx) => SendMoney(barcodeScanRes)));
+    }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
     print('$barcodeScanRes +++++ step 1');
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (ctx) => SendMoney(barcodeScanRes)));
   }
 
   @override
   Widget build(BuildContext context) {
-    // final user = Provider.of<AuthenticationService>(context);
-    // final uid = user.uid;
-
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -54,7 +52,6 @@ class _HomeState extends State<Home> {
         actions: [
           RaisedButton(
             onPressed: () async {
-              // getUID();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => Settings1()));
             },
@@ -67,16 +64,16 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-
       body: new Container(
         color: Colors.black,
         child: ListView(
           children: <Widget>[
-            //First container
             new Container(
-                padding: EdgeInsets.only(left: 100, top: 50),
+                padding: EdgeInsets.only(top: 50),
+                alignment: Alignment.center,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     new Column(
                       children: <Widget>[
@@ -97,12 +94,9 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ],
-                )), //first container end
-
-            //Second Container start
+                )),
             new Container(
-              padding:
-                  EdgeInsets.only(left: 30, top: 50, right: 30, bottom: 50),
+              padding: EdgeInsets.only(left: 0, top: 50, right: 0, bottom: 50),
               margin: EdgeInsets.all(10.0),
               child: new Column(
                 children: <Widget>[
@@ -110,7 +104,7 @@ class _HomeState extends State<Home> {
                     height: 10,
                   ),
                   new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       new Container(
                         height: 150.0,
@@ -144,9 +138,9 @@ class _HomeState extends State<Home> {
                                     builder: (context) => WalletApp()));
                           },
                         ),
-                      ), //first item container
+                      ),
                       SizedBox(
-                        width: 10.0,
+                        width: 15.0,
                       ),
                       new Container(
                         height: 150.0,
@@ -180,16 +174,14 @@ class _HomeState extends State<Home> {
                                     builder: (context) => AddMoney()));
                           },
                         ),
-                      ), //second item container
+                      ),
                     ],
-                  ), //First Row End
-
-                  //Second Row Start
+                  ),
                   SizedBox(
                     height: 15.0,
                   ),
                   new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       new Container(
                         height: 150.0,
@@ -217,17 +209,12 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                           onTap: () {
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //     builder: (ctx) => SendMoney(_scanBarcode)));
                             scanBarcodeNormal();
-                            // Navigator.push(context,
-                            //     MaterialPageRoute(builder: (context) => bc()));
                           },
                         ),
                       ),
-
                       SizedBox(
-                        width: 10.0,
+                        width: 15.0,
                       ),
                       new Container(
                           height: 150.0,
@@ -257,40 +244,15 @@ class _HomeState extends State<Home> {
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(builder: (ctx) => Chats()),
                             ),
-                          )), //second item container
+                          )),
                     ],
-                  ), //second Row End
+                  ),
                 ],
               ),
             ),
           ],
         ),
-      ), //end container
+      ),
     );
   }
-
-// Future<void> getUID() async {
-//   dynamic uid = await _auth.getCurrentUID();
-//   if (uid == null) {
-//     print("UID is NULL");
-//   }
-//   else {
-//     print("uid-$uid");
-//     DatabaseManager databaseManager = DatabaseManager(uid: uid);
-//     DocumentSnapshot resultant = await databaseManager.getUsersList();
-//
-//     if (resultant == null) {
-//       print('Unable to retrieve');
-//     } else {
-//       setState(() {
-//         print(resultant.get('name'));
-//         print(resultant.get('rollNo'));
-//        // String name = resultant.g;
-//        // String rollNo = resultant[1];
-//        // print("name = $name");
-//        // print("rollNor = $rollNo");
-//       });
-//     }
-//   }
-// }
 }

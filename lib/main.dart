@@ -1,4 +1,3 @@
-// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
@@ -19,11 +18,7 @@ void main() async {
   runApp(MyApp());
 }
 
-// final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-// final GoogleSignIn googleSignIn = GoogleSignIn();
-
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -31,7 +26,6 @@ class MyApp extends StatelessWidget {
     print(
         '${preferenceHelper.preferences.getBool('login')}++++++++++++++++++++++');
     return MaterialApp(
-      // initialRoute: '/welcomepage',
       routes: {
         '/welcomepage': (context) => WelcomePage(),
         '/Home': (context) => Home(),
@@ -39,7 +33,6 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignUpPage(),
         '/verify': (context) => VerifyScreen(),
         '/AddMoney': (context) => AddMoney(),
-        '/AddMoney': (context) => NewScreen(),
         '/barcode': (context) => bc(),
       },
       title: 'Info App',
