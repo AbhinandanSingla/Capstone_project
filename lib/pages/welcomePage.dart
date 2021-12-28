@@ -30,7 +30,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   color: Colors.indigo.shade500,
                   offset: Offset(2, 4),
                   blurRadius: 8,
-                  spreadRadius: 2)
+                  spreadRadius: 0)
             ],
             color: Colors.grey[300]),
         child: Text(
@@ -58,7 +58,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   color: Colors.indigo.shade500,
                   offset: Offset(2, 4),
                   blurRadius: 8,
-                  spreadRadius: 2)
+                  spreadRadius: 0)
             ],
             color: Colors.grey[300]),
         child: Text(
@@ -94,27 +94,34 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 30),
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("images/pic.jpg"), fit: BoxFit.cover),
+            color: Colors.white,
+            // image: DecorationImage(
+            //     image: AssetImage("images/pic.jpg"), fit: BoxFit.cover),
             borderRadius: BorderRadius.all(Radius.circular(10)),
             boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.grey.shade500,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
+              // BoxShadow(
+              //     color: Colors.grey.shade500,
+              //     offset: Offset(2, 4),
+              //     blurRadius: 5,
+              //     spreadRadius: 2)
             ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Image.asset(
+                'images/logo.png',
+                height: size.height * 0.2,
+              ),
+              SizedBox(height: size.height * .04),
               _title(),
               SizedBox(
                 height: 80,

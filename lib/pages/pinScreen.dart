@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
 import 'package:flutter_login_signup/pages/chats.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
@@ -35,7 +36,7 @@ class _PinScreenState extends State<PinScreen> {
         .get()
         .then((value) {
       if (value.docs.isEmpty) {
-        _showSnackBar('Invalid User', context);
+        Fluttertoast.showToast(msg: 'Invalid User');
       } else {
         userUID = value.docs[0].id;
         userPin = value.docs[0].get('pin');
@@ -59,7 +60,7 @@ class _PinScreenState extends State<PinScreen> {
     print('step money +++++ $money');
     print('step money +++++ ${widget.data['money']}');
     if (double.parse(money) < double.parse(widget.data['money'].toString())) {
-      return _showSnackBar('Money is insufficient in wallet', ctx);
+      return Fluttertoast.showToast(msg: 'Money is insufficient in wallet');
     }
     String? name = preferenceHelper.preferences.getString('name');
 
@@ -215,7 +216,7 @@ class _PinScreenState extends State<PinScreen> {
                               if (userPin == pin) {
                                 sendMoney(context);
                               } else {
-                                _showSnackBar('Entered Wrong Pin', context);
+                                Fluttertoast.showToast(msg: 'Enter Wrong Pin');
                               }
                             },
                             focusNode: _pinPutFocusNode,
@@ -247,7 +248,7 @@ class _PinScreenState extends State<PinScreen> {
                               if (userPin == _pinPutController.value.text) {
                                 sendMoney(context);
                               } else {
-                                _showSnackBar('Entered Wrong Pin', context);
+                                Fluttertoast.showToast(msg: 'Enter Wrong Pin');
                               }
                             }),
                       ],

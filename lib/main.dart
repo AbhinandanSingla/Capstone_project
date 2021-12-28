@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_signup/Service/preference.dart';
 import 'package:flutter_login_signup/pages/AddMoney.dart';
 import 'package:flutter_login_signup/pages/Home.dart';
-import 'package:flutter_login_signup/pages/barcode_scanner.dart';
 import 'package:flutter_login_signup/pages/loginPage.dart';
 import 'package:flutter_login_signup/pages/signup.dart';
 import 'package:flutter_login_signup/pages/verify.dart';
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignUpPage(),
         '/verify': (context) => VerifyScreen(),
         '/AddMoney': (context) => AddMoney(),
-        '/barcode': (context) => bc(),
       },
       title: 'Info App',
       theme: ThemeData(
