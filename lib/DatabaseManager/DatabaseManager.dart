@@ -21,7 +21,6 @@ class DatabaseManager {
       'transaction': []
     });
   }
-
   Future updateUserList(
       String name, String rollNumber, String money, String uid) async {
     return await profile

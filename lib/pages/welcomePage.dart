@@ -62,7 +62,7 @@ class _WelcomePageState extends State<WelcomePage> {
             ],
             color: Colors.grey[300]),
         child: Text(
-          'Register',
+          'Register', 
           style: TextStyle(fontSize: 20, color: Colors.black),
         ),
       ),
